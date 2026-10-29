@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+
+# Dados e artefatos (nunca versionados)
+data/**
+!data/**/
+!data/**/.gitkeep
+mlruns/
+mlartifacts/
+*.parquet
+*.pkl
+*.joblib
+
+# Ambiente
+.env
+.ipynb_checkpoints/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example

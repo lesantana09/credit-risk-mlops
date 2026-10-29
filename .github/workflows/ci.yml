@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Lint, tipos e testes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Instalar dependências
+        run: uv sync --frozen
+
+      - name: Lint
+        run: |
+          uv run ruff check --output-format=github
+          uv run ruff format --check
+
+      - name: Tipos
+        run: uv run mypy
+
+      - name: Testes
+        run: uv run pytest
+
+  terraform:
+    name: Terraform fmt + validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.10"
+
+      - name: fmt
+        run: terraform -chdir=infra/terraform fmt -check -recursive
+
+      - name: validate (bootstrap)
+        run: |
+          terraform -chdir=infra/terraform/bootstrap init -backend=false
+          terraform -chdir=infra/terraform/bootstrap validate
