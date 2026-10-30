@@ -5,6 +5,7 @@ description = "Ciclo de vida completo de um modelo de risco de crédito, do dado
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "pandas>=3.1.0",
     "pydantic-settings>=2.6",
 ]
 
